@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic&display=swap");
+
+.title-font {
+    text-align: center;
+
+    --bs-text-opacity: 1;
+    color: rgba(var(--bs-warning-rgb), var(--bs-text-opacity));
+
+    font-size: calc(1.325rem + 0.9vw);
+    font-family: "Black Han Sans", sans-serif;
+}
+
+.empty-content-font {
+    font-family: "Nanum Gothic", sans-serif;
+    font-size: calc(1rem + 0.3vw);
+    font-weight: bold;
+}
