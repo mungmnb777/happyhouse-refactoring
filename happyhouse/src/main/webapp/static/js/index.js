@@ -1,11 +1,10 @@
 window.onload = function () {
     $.ajax({
-        url: "http://localhost:8080/house/states",
+        url: "http://localhost:8080/address/states",
         type: "GET",
-        data: {
-        },
+        data: {},
         dataType: "json",
-        success: function (response) {        	
+        success: function (response) {
             let code = ``;
             $.each(response, function (index, item) {
                 code += `<option value="${item.code}">${item.name}</option>`;
@@ -22,10 +21,10 @@ window.onload = function () {
         state_text = $("#state option:checked").text();
 
         $.ajax({
-            url: "http://localhost:8080/house/cities",
+            url: "http://localhost:8080/address/cities",
             type: "GET",
             data: {
-                stateCode : state_val
+                stateCode: state_val
             },
             dataType: "json",
             success: function (response) {
@@ -40,20 +39,20 @@ window.onload = function () {
             },
         });
     });
-    
+
     $("#city").change(function () {
-      cityCode = $(this).val();
+        cityCode = $(this).val();
 
-      if (cityCode != undefined) {
-          let url = `house/items?cityCode=${cityCode}`;
+        if (cityCode != undefined) {
+            let url = `house/items?cityCode=${cityCode}`;
 
-          location.href = url;
-      } else {
-          console.log(state_val);
-          console.log(city_val);
-          console.log(dong_val);
+            location.href = url;
+        } else {
+            console.log(state_val);
+            console.log(city_val);
+            console.log(dong_val);
 
-          alert("빈 칸이 있습니다!");
-      }
-  });
+            alert("빈 칸이 있습니다!");
+        }
+    });
 };

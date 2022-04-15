@@ -1,8 +1,6 @@
-console.log("ok");
-
 window.onload = function () {
     $.ajax({
-        url: "http://localhost:8080/house/states",
+        url: "http://localhost:8080/address/states",
         type: "GET",
         data: {
 
@@ -24,7 +22,7 @@ window.onload = function () {
         state_val = $(this).val();
 
         $.ajax({
-            url: "http://localhost:8080/house/cities",
+            url: "http://localhost:8080/address/cities",
             type: "GET",
             data: {
                 stateCode : state_val
@@ -47,7 +45,7 @@ window.onload = function () {
         city_val = $(this).val();
 
         $.ajax({
-            url: "http://localhost:8080/house/dongs",
+            url: "http://localhost:8080/address/dongs",
             type: "GET",
             data: {
                 cityCode : city_val
