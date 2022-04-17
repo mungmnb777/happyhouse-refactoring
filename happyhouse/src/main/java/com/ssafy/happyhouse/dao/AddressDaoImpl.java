@@ -12,112 +12,133 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressDaoImpl implements AddressDao{
-	// 싱글턴
-	private static AddressDao dao = new AddressDaoImpl();
-	
-	private AddressDaoImpl() {}
-	
-	public static AddressDao getInstance() {
-		return dao;
-	}
-	
-	@Override
-	public List<State> getStateList() {
-		List<State> list = new ArrayList<>();
+public class AddressDaoImpl implements AddressDao {
+    // 싱글턴
+    private static AddressDao dao = new AddressDaoImpl();
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("select * \n");
-		sql.append("from state\n");
+    private AddressDaoImpl() {
+    }
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-					String code = rs.getString("state_code");
-					String name = rs.getString("state_name");
+    public static AddressDao getInstance() {
+        return dao;
+    }
 
-					list.add(new State(code, name));
-				}
-			}
+    @Override
+    public List<State> getStateList() {
+        List<State> list = new ArrayList<>();
 
-			return list;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * \n");
+        sql.append("from state\n");
 
-		return null;
-	}
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    // state DTO
+                    State state = State.builder()
+                            .code(rs.getString("state_code"))
+                            .name(rs.getString("state_name"))
+                            .build();
 
-	@Override
-	public List<City> getCityList(String stateCode) {
-		List<City> list = new ArrayList<>();
+                    list.add(state);
+                }
+            }
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("select * \n");
-		sql.append("from state s join city c \n");
-		sql.append("using (state_code) \n");
-		sql.append("where state_code = ? \n");
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			pstmt.setString(1, stateCode);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-					// state DTO
-					State state = new State(rs.getString("state_code"), rs.getString("state_name"));
-					
-					// city DTO 
-					String code = rs.getString("city_code");
-					String name = rs.getString("city_name");
+        return null;
+    }
 
-					list.add(new City(state, code, name));
-				}
-			}
+    @Override
+    public List<City> getCityList(String stateCode) {
+        List<City> list = new ArrayList<>();
 
-			return list;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * \n");
+        sql.append("from state s join city c \n");
+        sql.append("using (state_code) \n");
+        sql.append("where state_code = ? \n");
 
-		return null;
-	}
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            pstmt.setString(1, stateCode);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    // state DTO
+                    State state = State.builder()
+                            .code(rs.getString("state_code"))
+                            .name(rs.getString("state_name"))
+                            .build();
 
-	@Override
-	public List<Dong> getDongList(String cityCode) {
-		List<Dong> list = new ArrayList<>();
+                    // city DTO
+                    City city = City.builder()
+                            .state(state)
+                            .code(rs.getString("city_code"))
+                            .name(rs.getString("city_name"))
+                            .build();
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("select * \n");
-		sql.append("from dong join city \n");
-		sql.append("using (city_code) \n");
-		sql.append("join state \n");
-		sql.append("using (state_code) \n");
-		sql.append("where city_code = ?");
+                    list.add(city);
+                }
+            }
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			pstmt.setString(1, cityCode);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-					// state DTO
-					State state = new State(rs.getString("state_code"), rs.getString("state_name"));
-					
-					// city DTO 
-					City city =  new City(state, rs.getString("city_code"), rs.getString("city_name"));
-							
-					String code = rs.getString("dong_code");
-					String name = rs.getString("dong_name");
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-					list.add(new Dong(city, code, name));
-				}
-			}
+        return null;
+    }
 
-			return list;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+    @Override
+    public List<Dong> getDongList(String cityCode) {
+        List<Dong> list = new ArrayList<>();
 
-		return null;
-	}
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * \n");
+        sql.append("from dong join city \n");
+        sql.append("using (city_code) \n");
+        sql.append("join state \n");
+        sql.append("using (state_code) \n");
+        sql.append("where city_code = ?");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            pstmt.setString(1, cityCode);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    // state DTO
+                    State state = State.builder()
+                            .code(rs.getString("state_code"))
+                            .name(rs.getString("state_name"))
+                            .build();
+
+                    // city DTO
+                    City city = City.builder()
+                            .state(state)
+                            .code(rs.getString("city_code"))
+                            .name(rs.getString("city_name"))
+                            .build();
+
+                    // dong DTO
+                    Dong dong = Dong.builder()
+                            .city(city)
+                            .code(rs.getString("dong_code"))
+                            .name(rs.getString("dong_name"))
+                            .build();
+
+                    list.add(dong);
+                }
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

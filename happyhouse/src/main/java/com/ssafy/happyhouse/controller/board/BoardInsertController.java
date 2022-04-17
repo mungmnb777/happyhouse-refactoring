@@ -28,13 +28,15 @@ public class BoardInsertController extends HttpServlet {
         String content = (String) request.getParameter("content");
         String loginId = (String) request.getSession().getAttribute("loginId");
 
-        MemberDto memberDto = new MemberDto();
-        memberDto.setId(loginId);
+        MemberDto memberDto = MemberDto.builder()
+                .id(loginId)
+                .build();
 
-        BoardDto boardDto = new BoardDto();
-        boardDto.setTitle(title);
-        boardDto.setContent(content);
-        boardDto.setMember(memberDto);
+        BoardDto boardDto = BoardDto.builder()
+                .title(title)
+                .content(content)
+                .member(memberDto)
+                .build();
 
         int result = boardService.addArticle(boardDto);
 

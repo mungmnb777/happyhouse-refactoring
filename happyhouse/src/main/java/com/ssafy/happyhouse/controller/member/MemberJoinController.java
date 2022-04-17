@@ -4,9 +4,12 @@ import com.ssafy.happyhouse.dto.MemberDto;
 import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.MemberServiceImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/member/join")
@@ -22,14 +25,14 @@ public class MemberJoinController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MemberDto dto = new MemberDto();
-
-        dto.setId(request.getParameter("id"));
-        dto.setPassword(request.getParameter("password"));
-        dto.setName(request.getParameter("name"));
-        dto.setNickname(request.getParameter("nickname"));
-        dto.setEmail(request.getParameter("email"));
-        dto.setTel(request.getParameter("tel"));
+        MemberDto dto = MemberDto.builder()
+                .id(request.getParameter("id"))
+                .password(request.getParameter("password"))
+                .name(request.getParameter("name"))
+                .nickname(request.getParameter("nickname"))
+                .email(request.getParameter("email"))
+                .tel(request.getParameter("tel"))
+                .build();
 
         int result = memberService.join(dto);
 

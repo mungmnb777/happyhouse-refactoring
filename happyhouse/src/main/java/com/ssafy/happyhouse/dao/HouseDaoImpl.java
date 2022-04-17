@@ -47,24 +47,33 @@ public class HouseDaoImpl implements HouseDao {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
 					// State DTO 필드
-					State findState = new State(rs.getString("state_code"), rs.getString("state_name"));
-					// City DTO 필드
-					City findCity = new City(findState, rs.getString("city_code"), rs.getString("city_name"));
-					// house DTO 필드
-					int id = rs.getInt("house_id");
-					String houseName = rs.getString("house_name");
-					String price = rs.getString("deal_price");
-					String buildYear = rs.getString("build_year");
-					String dealYear = rs.getString("deal_year");
-					String dealMonth = rs.getString("deal_month");
-					String dealDay = rs.getString("deal_day");
-					String roadName = rs.getString("road_name");
-					String mainRoadNo = rs.getString("main_road_no");
-					String subRoadNo = rs.getString("sub_road_no");
-					String area = rs.getString("area");
+					State findState = State.builder()
+							.code(rs.getString("state_code"))
+							.name(rs.getString("state_name"))
+							.build();
 
-					HouseDto house = new HouseDto(id, houseName, price, buildYear, dealYear, dealMonth, dealDay,
-							roadName, mainRoadNo, subRoadNo, area, findCity);
+					// City DTO 필드
+					City findCity = City.builder()
+							.state(findState)
+							.code(rs.getString("city_code"))
+							.name(rs.getString("city_name"))
+							.build();
+
+					// house DTO 필드
+					HouseDto house = HouseDto.builder()
+							.id(rs.getInt("house_id"))
+							.name(rs.getString("house_name"))
+							.price(rs.getString("deal_price"))
+							.buildYear(rs.getString("build_year"))
+							.dealYear(rs.getString("deal_year"))
+							.dealMonth(rs.getString("deal_month"))
+							.dealDay(rs.getString("deal_day"))
+							.roadName(rs.getString("road_name"))
+							.mainRoadNo(rs.getString("main_road_no"))
+							.subRoadNo(rs.getString("sub_road_no"))
+							.area(rs.getString("area"))
+							.city(findCity)
+							.build();
 
 					list.add(house);
 				}

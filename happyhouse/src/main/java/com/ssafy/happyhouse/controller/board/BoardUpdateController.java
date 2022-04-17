@@ -33,11 +33,11 @@ public class BoardUpdateController extends HttpServlet {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
-        BoardDto boardDto = new BoardDto();
-
-        boardDto.setId(boardId);
-        boardDto.setTitle(title);
-        boardDto.setContent(content);
+        BoardDto boardDto = BoardDto.builder()
+                .id(boardId)
+                .title(title)
+                .content(content)
+                .build();
 
         if (memberId == null) {
             response.setContentType("text/html;charset=utf-8");

@@ -25,8 +25,9 @@ public class PlaceSearchController extends HttpServlet {
         String pg = request.getParameter("pg");
         String memberId = (String) request.getSession().getAttribute("loginId");
 
-        MemberDto member = new MemberDto();
-        member.setId(memberId);
+        MemberDto member = MemberDto.builder()
+                .id(memberId)
+                .build();
 
         // 로그인 한 상태가 아니면 비정상적인 접근!
         if (memberId == null) {

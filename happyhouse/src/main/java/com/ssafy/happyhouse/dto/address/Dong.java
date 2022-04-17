@@ -1,5 +1,10 @@
 package com.ssafy.happyhouse.dto.address;
 
+import com.ssafy.happyhouse.dto.BoardDto;
+import com.ssafy.happyhouse.dto.MemberDto;
+
+import java.time.LocalDateTime;
+
 public class Dong {
 	private City city;
 	private String code;
@@ -45,4 +50,35 @@ public class Dong {
 		return "Dong [city=" + city + ", code=" + code + ", name=" + name + "]";
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		// 시도 객체
+		private City city;
+		// 동코드
+		private String code;
+		// 이름
+		private String name;
+
+		public Builder city(City city) {
+			this.city = city;
+			return this;
+		}
+
+		public Builder code(String code) {
+			this.code = code;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Dong build() {
+			return new Dong(city, code, name);
+		}
+	}
 }

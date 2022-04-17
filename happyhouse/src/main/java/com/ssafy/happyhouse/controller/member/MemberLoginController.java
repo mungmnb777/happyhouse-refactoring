@@ -22,9 +22,10 @@ public class MemberLoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MemberDto dto = new MemberDto();
-        dto.setId(request.getParameter("id"));
-        dto.setPassword(request.getParameter("password"));
+        MemberDto dto = MemberDto.builder()
+                .id(request.getParameter("id"))
+                .password(request.getParameter("password"))
+                .build();
 
         boolean isLogin = memberService.login(dto);
 

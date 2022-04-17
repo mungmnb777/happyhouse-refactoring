@@ -64,17 +64,28 @@ public class BoardDaoImpl implements BoardDao {
 
 			try(ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
-					MemberDto member = new MemberDto(rs.getString("member_id"), rs.getString("password"), rs.getString("member_name"), rs.getString("nickname"),
-												rs.getString("email"), rs.getTimestamp("member_cdate").toLocalDateTime(), rs.getTimestamp("member_udate").toLocalDateTime(),
-												rs.getString("tel"), rs.getString("role"));
-					
-					BoardDto dto = new BoardDto();
-					dto.setId(rs.getInt("board_id"));
-					dto.setTitle(rs.getString("title"));
-					dto.setContent(rs.getString("content"));
-					dto.setCdate(rs.getTimestamp("board_cdate").toLocalDateTime());
-					dto.setUdate(rs.getTimestamp("board_udate").toLocalDateTime());
-					dto.setMember(member);
+					// member DTO
+					MemberDto member = MemberDto.builder()
+							.id(rs.getString("member_id"))
+							.password(rs.getString("password"))
+							.name(rs.getString("member_name"))
+							.nickname(rs.getString("nickname"))
+							.email(rs.getString("email"))
+							.cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
+							.udate(rs.getTimestamp("member_udate").toLocalDateTime())
+							.tel(rs.getString("tel"))
+							.role(rs.getString("role"))
+							.build();
+
+					// board DTO
+					BoardDto dto = BoardDto.builder()
+							.id(rs.getInt("board_id"))
+							.title(rs.getString("title"))
+							.content(rs.getString("title"))
+							.cdate(rs.getTimestamp("board_cdate").toLocalDateTime())
+							.udate(rs.getTimestamp("board_udate").toLocalDateTime())
+							.member(member)
+							.build();
 					
 					list.add(dto);
 				}
@@ -100,18 +111,30 @@ public class BoardDaoImpl implements BoardDao {
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
-					MemberDto member = new MemberDto(rs.getString("member_id"), rs.getString("password"), rs.getString("member_name"), rs.getString("nickname"),
-							rs.getString("email"), rs.getTimestamp("member_cdate").toLocalDateTime(), rs.getTimestamp("member_udate").toLocalDateTime(),
-							rs.getString("tel"), rs.getString("role"));
+					// member DTO
+					MemberDto member = MemberDto.builder()
+							.id(rs.getString("member_id"))
+							.password(rs.getString("password"))
+							.name(rs.getString("member_name"))
+							.nickname(rs.getString("nickname"))
+							.email(rs.getString("email"))
+							.cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
+							.udate(rs.getTimestamp("member_udate").toLocalDateTime())
+							.tel(rs.getString("tel"))
+							.role(rs.getString("role"))
+							.build();
 					
 					// board DTO
-					int board_id = rs.getInt("board_id");
-					String title = rs.getString("title");
-					String content = rs.getString("content");
-					LocalDateTime cdate = rs.getTimestamp("board_cdate").toLocalDateTime();
-					LocalDateTime udate = rs.getTimestamp("board_udate").toLocalDateTime();
+					BoardDto dto = BoardDto.builder()
+							.id(rs.getInt("board_id"))
+							.title(rs.getString("title"))
+							.content(rs.getString("title"))
+							.cdate(rs.getTimestamp("board_cdate").toLocalDateTime())
+							.udate(rs.getTimestamp("board_udate").toLocalDateTime())
+							.member(member)
+							.build();
 					
-					return new BoardDto(board_id, title, content, member, cdate, udate);
+					return dto;
 				}
 			}
 		} catch (SQLException e) {

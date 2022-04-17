@@ -1,5 +1,6 @@
 package com.ssafy.happyhouse.dto;
 
+import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 
 public class BoardDto {
@@ -84,5 +85,56 @@ public class BoardDto {
 				+ cdate + ", udate=" + udate + "]";
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
 
+	public static class Builder {
+		// 공지사항 ID
+		private int id;
+		// 공지사항 제목
+		private String title;
+		// 공지사항 내용
+		private String content;
+		// 작성자
+		private MemberDto member;
+		// 글 작성 날짜
+		private LocalDateTime cdate;
+		// 글 수정 날짜
+		private LocalDateTime udate;
+
+		public Builder id(int id){
+			this.id = id;
+			return this;
+		}
+
+		public Builder title(String title){
+			this.title = title;
+			return this;
+		}
+
+		public Builder content(String content){
+			this.content = content;
+			return this;
+		}
+
+		public Builder member(MemberDto member){
+			this.member = member;
+			return this;
+		}
+
+		public Builder cdate(LocalDateTime cdate) {
+			this.cdate = cdate;
+			return this;
+		}
+
+		public Builder udate(LocalDateTime udate) {
+			this.udate = udate;
+			return this;
+		}
+
+		public BoardDto build() {
+			return new BoardDto(id, title, content, member, cdate, udate);
+		}
+	}
 }

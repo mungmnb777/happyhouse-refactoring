@@ -29,14 +29,18 @@ public class PlaceInsertController extends HttpServlet {
             return;
         }
 
-        MemberDto memberDto = new MemberDto();
-        memberDto.setId(memberId);
-        Dong dong = new Dong();
-        dong.setCode(dongCode);
+        MemberDto memberDto = MemberDto.builder()
+                .id(memberId)
+                .build();
 
-        FavPlaceDto favPlaceDto = new FavPlaceDto();
-        favPlaceDto.setMember(memberDto);
-        favPlaceDto.setDong(dong);
+        Dong dong = Dong.builder()
+                .code(dongCode)
+                .build();
+
+        FavPlaceDto favPlaceDto = FavPlaceDto.builder()
+                .member(memberDto)
+                .dong(dong)
+                .build();
 
         int result = favPlaceService.addFavPlace(favPlaceDto);
 

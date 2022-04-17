@@ -34,8 +34,6 @@ public class MemberUpdateController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MemberDto dto = new MemberDto();
-
         String id = request.getParameter("id");
         String nickname = request.getParameter("nickname");
         String email = request.getParameter("email");
@@ -49,11 +47,12 @@ public class MemberUpdateController extends HttpServlet {
             response.getWriter().write("<script>alert('비정상적인 접근입니다!'); location.href='/';</script>");
             return;
         }
-
-        dto.setId(id);
-        dto.setNickname(nickname);
-        dto.setEmail(email);
-        dto.setTel(tel);
+        MemberDto dto = MemberDto.builder()
+                .id(id)
+                .nickname(nickname)
+                .email(email)
+                .tel(tel)
+                .build();
 
         int result = memberService.updateMember(dto);
 

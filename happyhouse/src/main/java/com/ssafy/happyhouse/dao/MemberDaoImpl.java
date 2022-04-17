@@ -125,16 +125,20 @@ public class MemberDaoImpl implements MemberDao {
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
-					String password = rs.getString("password");
-					String name = rs.getString("member_name");
-					String nickname = rs.getString("nickname");
-					LocalDateTime cdate = rs.getTimestamp("member_cdate").toLocalDateTime();
-					LocalDateTime udate = rs.getTimestamp("member_udate").toLocalDateTime();
-					String email = rs.getString("email");
-					String tel = rs.getString("tel");
-					String role = rs.getString("role");
+					// member DTO
+					MemberDto member = MemberDto.builder()
+							.id(rs.getString("member_id"))
+							.password(rs.getString("password"))
+							.name(rs.getString("member_name"))
+							.nickname(rs.getString("nickname"))
+							.email(rs.getString("email"))
+							.cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
+							.udate(rs.getTimestamp("member_udate").toLocalDateTime())
+							.tel(rs.getString("tel"))
+							.role(rs.getString("role"))
+							.build();
 
-					return new MemberDto(id, password, name, nickname, email, cdate, udate, tel, role);
+					return member;
 				}
 			}
 		} catch (SQLException e) {
