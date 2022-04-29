@@ -1,17 +1,25 @@
 package com.ssafy.happyhouse.controller.member;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import com.ssafy.happyhouse.controller.Controller;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/member/logout")
-public class MemberLogoutController extends HttpServlet {
+public class MemberLogoutController implements Controller {
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("loginId");
 
         response.sendRedirect("/");
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

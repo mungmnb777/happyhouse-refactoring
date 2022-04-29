@@ -1,22 +1,22 @@
 package com.ssafy.happyhouse.controller.member;
 
-import com.ssafy.happyhouse.dto.BoardDto;
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.MemberDto;
 import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.MemberServiceImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/member/update")
-public class MemberUpdateController extends HttpServlet {
+public class MemberUpdateController implements Controller {
 
-    private static MemberService memberService = MemberServiceImpl.getInstace();
+    private final MemberService memberService = MemberServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = (String) request.getSession().getAttribute("loginId");
 
         if (id == null) {
@@ -33,7 +33,7 @@ public class MemberUpdateController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         String nickname = request.getParameter("nickname");
         String email = request.getParameter("email");

@@ -1,23 +1,27 @@
 package com.ssafy.happyhouse.controller.house;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.HouseDto;
-import com.ssafy.happyhouse.service.*;
+import com.ssafy.happyhouse.service.HouseService;
+import com.ssafy.happyhouse.service.HouseServiceImpl;
+import com.ssafy.happyhouse.service.PagingService;
+import com.ssafy.happyhouse.service.PagingServiceImpl;
 import com.ssafy.util.Paging;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/house/items")
-public class HouseSearchController extends HttpServlet {
+public class HouseSearchController implements Controller {
 
     private final HouseService houseService = HouseServiceImpl.getInstace();
     private final PagingService pagingService = PagingServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 페이지
         String pg = request.getParameter("pg");
         String cityCode = request.getParameter("cityCode");
@@ -33,5 +37,10 @@ public class HouseSearchController extends HttpServlet {
         } else {
             response.getWriter().write("fail");
         }
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

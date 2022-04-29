@@ -1,20 +1,25 @@
 package com.ssafy.happyhouse.controller.member;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.MemberServiceImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/member/delete")
-public class MemberDeleteController extends HttpServlet {
+public class MemberDeleteController implements Controller {
 
-    private static MemberService memberService = MemberServiceImpl.getInstace();
+    private final MemberService memberService = MemberServiceImpl.getInstace();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
 
         int result = memberService.deleteMember(id);

@@ -1,30 +1,28 @@
 package com.ssafy.happyhouse.controller.member;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.MemberDto;
 import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.MemberServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/member/join")
-public class MemberJoinController extends HttpServlet {
+public class MemberJoinController implements Controller {
 
-    private static MemberService memberService = MemberServiceImpl.getInstace();
+    private final MemberService memberService = MemberServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/member/member_join.jsp");
         dispatcher.forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MemberDto dto = MemberDto.builder()
                 .id(request.getParameter("id"))
                 .password(request.getParameter("password"))

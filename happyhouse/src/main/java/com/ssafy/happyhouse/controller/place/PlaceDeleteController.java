@@ -1,21 +1,25 @@
 package com.ssafy.happyhouse.controller.place;
 
-import com.ssafy.happyhouse.service.*;
+import com.ssafy.happyhouse.controller.Controller;
+import com.ssafy.happyhouse.service.FavPlaceService;
+import com.ssafy.happyhouse.service.FavPlaceServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/place/delete")
-public class PlaceDeleteController extends HttpServlet {
+public class PlaceDeleteController implements Controller {
 
     private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int favId = Integer.parseInt(request.getParameter("favId"));
 
         int result = favPlaceService.deleteFavPlace(favId);

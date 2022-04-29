@@ -1,25 +1,23 @@
 package com.ssafy.happyhouse.controller.address;
 
 import com.google.gson.Gson;
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.address.Dong;
 import com.ssafy.happyhouse.service.AddressService;
 import com.ssafy.happyhouse.service.AddressServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/address/dongs")
-public class DongController extends HttpServlet {
+public class DongController implements Controller {
 
     private final AddressService addressService = AddressServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String cityCode = request.getParameter("cityCode");
 
         List<Dong> dongList = addressService.getDongList(cityCode);
@@ -32,5 +30,10 @@ public class DongController extends HttpServlet {
         } else {
             response.getWriter().write("fail");
         }
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

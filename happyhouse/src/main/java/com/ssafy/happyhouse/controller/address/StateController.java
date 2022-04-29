@@ -1,23 +1,23 @@
 package com.ssafy.happyhouse.controller.address;
 
 import com.google.gson.Gson;
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.address.State;
 import com.ssafy.happyhouse.service.AddressService;
 import com.ssafy.happyhouse.service.AddressServiceImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/address/states")
-public class StateController extends HttpServlet {
+public class StateController implements Controller {
 
     private final AddressService addressService = AddressServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<State> stateList = addressService.getStateList();
 
         if (stateList != null) {
@@ -28,5 +28,10 @@ public class StateController extends HttpServlet {
         } else {
             response.getWriter().write("fail");
         }
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

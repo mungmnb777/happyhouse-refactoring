@@ -1,21 +1,22 @@
 package com.ssafy.happyhouse.controller.member;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.MemberDto;
 import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.MemberServiceImpl;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/member/item")
-public class MemberSearchController extends HttpServlet {
+public class MemberSearchController implements Controller {
 
-    private static MemberService memberService = MemberServiceImpl.getInstace();
+    private final MemberService memberService = MemberServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = (String) request.getSession().getAttribute("loginId");
 
         if (id == null) {
@@ -30,5 +31,10 @@ public class MemberSearchController extends HttpServlet {
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/member/member_search.jsp");
         dispatcher.forward(request, response);
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

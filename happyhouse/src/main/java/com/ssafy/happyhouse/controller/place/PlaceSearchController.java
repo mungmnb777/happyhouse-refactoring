@@ -1,27 +1,28 @@
 package com.ssafy.happyhouse.controller.place;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.FavPlaceDto;
 import com.ssafy.happyhouse.dto.MemberDto;
-import com.ssafy.happyhouse.service.*;
+import com.ssafy.happyhouse.service.FavPlaceService;
+import com.ssafy.happyhouse.service.FavPlaceServiceImpl;
+import com.ssafy.happyhouse.service.PagingService;
+import com.ssafy.happyhouse.service.PagingServiceImpl;
 import com.ssafy.util.Paging;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/place/items")
-public class PlaceSearchController extends HttpServlet {
+public class PlaceSearchController implements Controller {
 
     private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
     private final PagingService pagingService = PagingServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pg = request.getParameter("pg");
         String memberId = (String) request.getSession().getAttribute("loginId");
 
@@ -47,5 +48,10 @@ public class PlaceSearchController extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/favplace/fplace_list.jsp");
             dispatcher.forward(request, response);
         }
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

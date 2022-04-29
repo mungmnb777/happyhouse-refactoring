@@ -1,24 +1,28 @@
 package com.ssafy.happyhouse.controller.place;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.FavPlaceDto;
 import com.ssafy.happyhouse.dto.MemberDto;
 import com.ssafy.happyhouse.dto.address.Dong;
-import com.ssafy.happyhouse.service.*;
+import com.ssafy.happyhouse.service.FavPlaceService;
+import com.ssafy.happyhouse.service.FavPlaceServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/place/insert")
-public class PlaceInsertController extends HttpServlet {
+public class PlaceInsertController implements Controller {
 
     private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    @Override
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String memberId = (String) request.getSession().getAttribute("loginId");
         String dongCode = request.getParameter("dong");
 

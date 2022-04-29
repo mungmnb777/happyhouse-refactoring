@@ -1,31 +1,29 @@
 package com.ssafy.happyhouse.controller.board;
 
+import com.ssafy.happyhouse.controller.Controller;
 import com.ssafy.happyhouse.dto.BoardDto;
 import com.ssafy.happyhouse.dto.MemberDto;
 import com.ssafy.happyhouse.service.BoardService;
 import com.ssafy.happyhouse.service.BoardServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(value = "/board/insert")
-public class BoardInsertController extends HttpServlet {
+public class BoardInsertController implements Controller {
 
-    private BoardService boardService = BoardServiceImpl.getInstace();
+    private final BoardService boardService = BoardServiceImpl.getInstace();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/views/board/board_insert.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String title = (String) request.getParameter("title");
-        String content = (String) request.getParameter("content");
+    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
         String loginId = (String) request.getSession().getAttribute("loginId");
 
         MemberDto memberDto = MemberDto.builder()
