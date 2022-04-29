@@ -14,174 +14,175 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardDaoImpl implements BoardDao {
-	// 싱글턴
-	private static BoardDao dao = new BoardDaoImpl();
-	
-	private BoardDaoImpl() {}
-	
-	public static BoardDao getInstance() {
-		return dao;
-	}
-	
-	@Override
-	public int addArticle(BoardDto dto) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("insert into \n");
-		sql.append(
-				"board (title, content, author, board_cdate, board_udate) \n");
-		sql.append("values (?, ?, ?, now(), now())");
-		
-		try (Connection conn = DBConnection.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			pstmt.setString(1, dto.getTitle());
-			pstmt.setString(2, dto.getContent());
-			pstmt.setString(3, dto.getMember().getId());
+    // 싱글턴
+    private static BoardDao dao = new BoardDaoImpl();
 
-			return pstmt.executeUpdate();
+    private BoardDaoImpl() {
+    }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return 0;
-	}
+    public static BoardDao getInstance() {
+        return dao;
+    }
 
-	@Override
-	public List<BoardDto> findAll(Paging paging) {
-		List<BoardDto> list = new ArrayList<BoardDto>();
-		
-		StringBuilder listArticle = new StringBuilder();
-		listArticle.append("select * \n");
-		listArticle.append("from board join `member` \n");
-		listArticle.append("on member_id = author \n");
-		listArticle.append("order by board_cdate desc\n");
-		listArticle.append("limit ?, ? \n");
-		
-		try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(listArticle.toString())){
+    @Override
+    public int addArticle(BoardDto dto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("insert into \n");
+        sql.append(
+                "board (title, content, author, board_cdate, board_udate) \n");
+        sql.append("values (?, ?, ?, now(), now())");
 
-			pstmt.setInt(1, (paging.getPage() - 1) * paging.getPostPerPage());
-			pstmt.setInt(2, paging.getPostPerPage());
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            pstmt.setString(1, dto.getTitle());
+            pstmt.setString(2, dto.getContent());
+            pstmt.setString(3, dto.getMember().getId());
 
-			try(ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-					// member DTO
-					MemberDto member = MemberDto.builder()
-							.id(rs.getString("member_id"))
-							.password(rs.getString("password"))
-							.name(rs.getString("member_name"))
-							.nickname(rs.getString("nickname"))
-							.email(rs.getString("email"))
-							.cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
-							.udate(rs.getTimestamp("member_udate").toLocalDateTime())
-							.tel(rs.getString("tel"))
-							.role(rs.getString("role"))
-							.build();
+            return pstmt.executeUpdate();
 
-					// board DTO
-					BoardDto dto = BoardDto.builder()
-							.id(rs.getInt("board_id"))
-							.title(rs.getString("title"))
-							.content(rs.getString("title"))
-							.cdate(rs.getTimestamp("board_cdate").toLocalDateTime())
-							.udate(rs.getTimestamp("board_udate").toLocalDateTime())
-							.member(member)
-							.build();
-					
-					list.add(dto);
-				}
-				return list;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Override
-	public BoardDto findById(int id) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("select * \n");
-		sql.append("from board join member \n");
-		sql.append("on author = member_id \n");
-		sql.append("where board_id = ?");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			pstmt.setInt(1, id);
+        return 0;
+    }
 
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					// member DTO
-					MemberDto member = MemberDto.builder()
-							.id(rs.getString("member_id"))
-							.password(rs.getString("password"))
-							.name(rs.getString("member_name"))
-							.nickname(rs.getString("nickname"))
-							.email(rs.getString("email"))
-							.cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
-							.udate(rs.getTimestamp("member_udate").toLocalDateTime())
-							.tel(rs.getString("tel"))
-							.role(rs.getString("role"))
-							.build();
-					
-					// board DTO
-					BoardDto dto = BoardDto.builder()
-							.id(rs.getInt("board_id"))
-							.title(rs.getString("title"))
-							.content(rs.getString("title"))
-							.cdate(rs.getTimestamp("board_cdate").toLocalDateTime())
-							.udate(rs.getTimestamp("board_udate").toLocalDateTime())
-							.member(member)
-							.build();
-					
-					return dto;
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
+    @Override
+    public List<BoardDto> findAll(Paging paging) {
+        List<BoardDto> list = new ArrayList<BoardDto>();
 
-		return null;
-	}
+        StringBuilder listArticle = new StringBuilder();
+        listArticle.append("select * \n");
+        listArticle.append("from board join `member` \n");
+        listArticle.append("on member_id = author \n");
+        listArticle.append("order by board_cdate desc\n");
+        listArticle.append("limit ?, ? \n");
 
-	@Override
-	public int updateArticle(BoardDto dto) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("update board \n");
-		sql.append("set title = ?, content = ?, board_udate = now()\n");
-		sql.append("where board_id = ?");
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(listArticle.toString())) {
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			pstmt.setString(1, dto.getTitle());
-			pstmt.setString(2, dto.getContent());
-			pstmt.setInt(3, dto.getId());
+            pstmt.setInt(1, (paging.getPage() - 1) * paging.getPostPerPage());
+            pstmt.setInt(2, paging.getPostPerPage());
 
-			return pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    // member DTO
+                    MemberDto member = MemberDto.builder()
+                            .id(rs.getString("member_id"))
+                            .password(rs.getString("password"))
+                            .name(rs.getString("member_name"))
+                            .nickname(rs.getString("nickname"))
+                            .email(rs.getString("email"))
+                            .cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
+                            .udate(rs.getTimestamp("member_udate").toLocalDateTime())
+                            .tel(rs.getString("tel"))
+                            .role(rs.getString("role"))
+                            .build();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+                    // board DTO
+                    BoardDto dto = BoardDto.builder()
+                            .id(rs.getInt("board_id"))
+                            .title(rs.getString("title"))
+                            .content(rs.getString("title"))
+                            .cdate(rs.getTimestamp("board_cdate").toLocalDateTime())
+                            .udate(rs.getTimestamp("board_udate").toLocalDateTime())
+                            .member(member)
+                            .build();
 
-		return 0;
-	}
+                    list.add(dto);
+                }
+                return list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	@Override
-	public int deleteArticle(int id) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("delete from board \n");
-		sql.append("where board_id = ?");
+    @Override
+    public BoardDto findById(int id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * \n");
+        sql.append("from board join member \n");
+        sql.append("on author = member_id \n");
+        sql.append("where board_id = ?");
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			pstmt.setInt(1, id);
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            pstmt.setInt(1, id);
 
-			return pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // member DTO
+                    MemberDto member = MemberDto.builder()
+                            .id(rs.getString("member_id"))
+                            .password(rs.getString("password"))
+                            .name(rs.getString("member_name"))
+                            .nickname(rs.getString("nickname"))
+                            .email(rs.getString("email"))
+                            .cdate(rs.getTimestamp("member_cdate").toLocalDateTime())
+                            .udate(rs.getTimestamp("member_udate").toLocalDateTime())
+                            .tel(rs.getString("tel"))
+                            .role(rs.getString("role"))
+                            .build();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
+                    // board DTO
+                    BoardDto dto = BoardDto.builder()
+                            .id(rs.getInt("board_id"))
+                            .title(rs.getString("title"))
+                            .content(rs.getString("content"))
+                            .cdate(rs.getTimestamp("board_cdate").toLocalDateTime())
+                            .udate(rs.getTimestamp("board_udate").toLocalDateTime())
+                            .member(member)
+                            .build();
+
+                    return dto;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public int updateArticle(BoardDto dto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("update board \n");
+        sql.append("set title = ?, content = ?, board_udate = now()\n");
+        sql.append("where board_id = ?");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            pstmt.setString(1, dto.getTitle());
+            pstmt.setString(2, dto.getContent());
+            pstmt.setInt(3, dto.getId());
+
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int deleteArticle(int id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("delete from board \n");
+        sql.append("where board_id = ?");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            pstmt.setInt(1, id);
+
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }

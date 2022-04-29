@@ -72,17 +72,17 @@
                         <ul class="pagination justify-content-center">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="${root}/items?cityCode=${param.cityCode}&pg=${paging.prevBlock}">이전</a>
+                                   href="${root}/house/items?cityCode=${param.cityCode}&pg=${paging.prevBlock}">이전</a>
                             </li>
                             <c:forEach var="page" begin="${paging.startPage}" end="${paging.endPage}">
                                 <li class="page-item">
                                     <a class="page-link"
-                                       href="${root}/items?cityCode=${param.cityCode}&pg=${page}">${page}</a>
+                                       href="${root}/house/items?cityCode=${param.cityCode}&pg=${page}">${page}</a>
                                 </li>
                             </c:forEach>
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="${root}/items?cityCode=${param.cityCode}&pg=${paging.nextBlock}">다음</a>
+                                   href="${root}/house/items?cityCode=${param.cityCode}&pg=${paging.nextBlock}">다음</a>
                             </li>
                         </ul>
                     </c:if>
