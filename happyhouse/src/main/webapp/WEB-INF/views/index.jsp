@@ -9,12 +9,12 @@
 <html lang="en">
 <head>
     <title>Happy House</title>
-    <c:import url="partition/head.jsp"/>
+    <c:import url="../partition/head.jsp"/>
     <link href="${pageContext.request.contextPath}/static/css/header.css" rel="stylesheet"/>
 </head>
 <body id="page-top">
 <!-- 네비게이션-->
-<c:import url="partition/nav.jsp"/>
+<c:import url="../partition/nav.jsp"/>
 <!-- 헤더-->
 <header class="masthead">
     <div class="address-container">
@@ -42,7 +42,7 @@
     </div>
 </header>
 <!-- 푸터-->
-<c:import url="partition/footer.jsp"/>
+<c:import url="../partition/footer.jsp"/>
 
 <script src="${pageContext.request.contextPath}/static/js/index.js"></script>
 </body>
