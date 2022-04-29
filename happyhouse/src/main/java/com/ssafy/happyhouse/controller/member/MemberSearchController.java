@@ -6,23 +6,23 @@ import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.MemberServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 
 public class MemberSearchController implements Controller {
 
     private final MemberService memberService = MemberServiceImpl.getInstace();
 
     @Override
-    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = (String) request.getSession().getAttribute("loginId");
+    public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {
+        String id = (String) session.getAttribute("loginId");
 
         if (id == null) return "redirect:/member/login";
 
         MemberDto member = memberService.findById(id);
 
-        request.setAttribute("member", member);
+        model.put("member", member);
 
         return "member/member_search";
     }

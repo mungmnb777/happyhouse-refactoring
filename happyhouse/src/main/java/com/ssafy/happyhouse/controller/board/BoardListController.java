@@ -9,10 +9,10 @@ import com.ssafy.happyhouse.service.PagingServiceImpl;
 import com.ssafy.util.Paging;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class BoardListController implements Controller {
 
@@ -20,15 +20,15 @@ public class BoardListController implements Controller {
     private final PagingService pagingService = PagingServiceImpl.getInstace();
 
     @Override
-    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String pg = request.getParameter("pg");
+    public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {
+        String pg = parameters.get("pg");
 
         Paging paging = pagingService.getPaging(pg);
 
         List<BoardDto> list = boardService.findAll(paging);
 
-        request.setAttribute("list", list);
-        request.setAttribute("paging", paging);
+        model.put("list", list);
+        model.put("paging", paging);
 
         return "board/board_list";
     }

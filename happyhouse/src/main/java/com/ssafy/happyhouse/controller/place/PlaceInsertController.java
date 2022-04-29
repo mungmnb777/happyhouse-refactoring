@@ -10,16 +10,18 @@ import com.ssafy.happyhouse.service.FavPlaceServiceImpl;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 
 public class PlaceInsertController implements Controller {
 
     private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
 
     @Override
-    public String post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String memberId = (String) request.getSession().getAttribute("loginId");
-        String dongCode = request.getParameter("dong");
+    public String post(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {
+        String memberId = (String) session.getAttribute("loginId");
+        String dongCode = parameters.get("dong");
 
         // 로그인 한 상태가 아니면 비정상적인 접근!
         if (memberId == null) return "redirect:/member/login";

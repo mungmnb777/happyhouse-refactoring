@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,35 +25,35 @@ import java.util.Map;
 @WebServlet(urlPatterns = {"", "/member/*", "/board/*", "/place/*", "/address/*", "/house/*"})
 public class FrontController extends HttpServlet {
 
-    private final Map<String, Controller> controllerMap = new HashMap<>();
+    private final Map<String, Controller> handlerMapping = new HashMap<>();
 
     public FrontController() {
         // WELCOME PAGE
-        controllerMap.put("/", new WelcomeController());
+        handlerMapping.put("/", new WelcomeController());
         // MEMBER PAGE
-        controllerMap.put("/member/join", new MemberJoinController());
-        controllerMap.put("/member/login", new MemberLoginController());
-        controllerMap.put("/member/item", new MemberSearchController());
-        controllerMap.put("/member/logout", new MemberLogoutController());
-        controllerMap.put("/member/update", new MemberUpdateController());
-        controllerMap.put("/member/delete", new MemberDeleteController());
+        handlerMapping.put("/member/join", new MemberJoinController());
+        handlerMapping.put("/member/login", new MemberLoginController());
+        handlerMapping.put("/member/item", new MemberSearchController());
+        handlerMapping.put("/member/logout", new MemberLogoutController());
+        handlerMapping.put("/member/update", new MemberUpdateController());
+        handlerMapping.put("/member/delete", new MemberDeleteController());
         // BOARD PAGE
-        controllerMap.put("/board/items", new BoardListController());
-        controllerMap.put("/board/item", new BoardSearchController());
-        controllerMap.put("/board/insert", new BoardInsertController());
-        controllerMap.put("/board/update", new BoardUpdateController());
-        controllerMap.put("/board/delete", new BoardDeleteController());
+        handlerMapping.put("/board/items", new BoardListController());
+        handlerMapping.put("/board/item", new BoardSearchController());
+        handlerMapping.put("/board/insert", new BoardInsertController());
+        handlerMapping.put("/board/update", new BoardUpdateController());
+        handlerMapping.put("/board/delete", new BoardDeleteController());
         // HOUSE PAGE
-        controllerMap.put("/house/items", new HouseSearchController());
+        handlerMapping.put("/house/items", new HouseSearchController());
         // PLACE PAGE
-        controllerMap.put("/place/stores", new StoreSearchController());
-        controllerMap.put("/place/items", new PlaceSearchController());
-        controllerMap.put("/place/insert", new PlaceInsertController());
-        controllerMap.put("/place/delete", new PlaceDeleteController());
+        handlerMapping.put("/place/stores", new StoreSearchController());
+        handlerMapping.put("/place/items", new PlaceSearchController());
+        handlerMapping.put("/place/insert", new PlaceInsertController());
+        handlerMapping.put("/place/delete", new PlaceDeleteController());
         // ADDRESS PAGE (for ajax)
-        controllerMap.put("/address/states", new StateController());
-        controllerMap.put("/address/cities", new CityController());
-        controllerMap.put("/address/dongs", new DongController());
+        handlerMapping.put("/address/states", new StateController());
+        handlerMapping.put("/address/cities", new CityController());
+        handlerMapping.put("/address/dongs", new DongController());
     }
 
     @Override
@@ -63,7 +64,7 @@ public class FrontController extends HttpServlet {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
 
-        Controller controller = controllerMap.get(requestURI);
+        Controller controller = handlerMapping.get(requestURI);
 
         if (controller == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -77,19 +78,33 @@ public class FrontController extends HttpServlet {
          * "redirect:/xxx" -> /xxx로 리다이렉트
          * "
          */
-        Object viewEntity = null;
+        View view = null;
+
+        Map<String, String> parameters = getParameters(request);
+        Map<String, Object> model = new HashMap<>();
+        HttpSession session = request.getSession();
 
         switch (method) {
             case "GET":
-                viewEntity = controller.get(request, response);
+                view = new View(controller.get(parameters, model, session));
                 break;
             case "POST":
-                viewEntity = controller.post(request, response);
+                view = new View(controller.post(parameters, model, session));
                 break;
         }
 
-        View view = new View(viewEntity);
+        model.forEach((key, value) -> request.setAttribute(key, value));
 
-        view.render(request, response);
+        if (view != null) view.render(request, response);
+        else response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    }
+
+    private Map<String, String> getParameters(HttpServletRequest request) {
+        Map<String, String> parameters = new HashMap<>();
+
+        request.getParameterNames().asIterator()
+                .forEachRemaining(parameter -> parameters.put(parameter, request.getParameter(parameter)));
+
+        return parameters;
     }
 }

@@ -13,8 +13,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class PlaceSearchController implements Controller {
 
@@ -22,9 +24,9 @@ public class PlaceSearchController implements Controller {
     private final PagingService pagingService = PagingServiceImpl.getInstace();
 
     @Override
-    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String pg = request.getParameter("pg");
-        String memberId = (String) request.getSession().getAttribute("loginId");
+    public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {
+        String pg = parameters.get("pg");
+        String memberId = (String) session.getAttribute("loginId");
 
         MemberDto member = MemberDto.builder()
                 .id(memberId)
@@ -36,10 +38,8 @@ public class PlaceSearchController implements Controller {
         Paging paging = pagingService.getPaging(pg, member);
         List<FavPlaceDto> list = favPlaceService.findAll(memberId, paging);
 
-        if (list != null) {
-            request.setAttribute("paging", paging);
-            request.setAttribute("list", list);
-        }
+        model.put("paging", paging);
+        model.put("list", list);
 
         return "favplace/fplace_list";
     }
