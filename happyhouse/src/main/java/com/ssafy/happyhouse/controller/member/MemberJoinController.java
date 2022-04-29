@@ -16,13 +16,12 @@ public class MemberJoinController implements Controller {
     private final MemberService memberService = MemberServiceImpl.getInstace();
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/member/member_join.jsp");
-        dispatcher.forward(request, response);
+    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        return "member/member_join";
     }
 
     @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MemberDto dto = MemberDto.builder()
                 .id(request.getParameter("id"))
                 .password(request.getParameter("password"))
@@ -34,15 +33,12 @@ public class MemberJoinController implements Controller {
 
         int result = memberService.join(dto);
 
-        if (result != 0) {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('가입에 성공했습니다!'); location.href='/';</script>");
-        } else {
+        if (result == 0) {
             request.setAttribute("msg", "중복된 아이디입니다! 다른 아이디로 가입해주세요!");
             request.setAttribute("member", dto);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/member/join.jsp");
-            dispatcher.forward(request, response);
+            return "member/join";
         }
+
+        return "redirect:/";
     }
 }

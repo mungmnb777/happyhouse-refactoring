@@ -14,24 +14,14 @@ public class BoardDeleteController implements Controller {
     private final BoardService boardService = BoardServiceImpl.getInstace();
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String loginId = (String) request.getSession().getAttribute("loginId");
         int boardId = Integer.parseInt(request.getParameter("boardId"));
 
-        if (loginId == null) {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('로그인 후 해주세요!'); location.href='/member/login';</script>");
-        }
+        if (loginId == null) return "redirect:/member/login";
 
-        int result = boardService.deleteArticle(boardId);
+        boardService.deleteArticle(boardId);
 
-        if (result != 0) {
-            response.sendRedirect("/board/items");
-        }
+        return "redirect:/board/items";
     }
 }

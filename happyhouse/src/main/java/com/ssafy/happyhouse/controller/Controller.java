@@ -5,8 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public interface Controller {
-    void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+public interface Controller<T> {
+    default T get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        return null;
+    }
 
-    void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+    default T post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        return null;
+    }
 }

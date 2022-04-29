@@ -15,16 +15,14 @@ public class BoardUpdateController implements Controller {
     private final BoardService boardService = BoardServiceImpl.getInstace();
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int boardId = Integer.parseInt(request.getParameter("boardId"));
-        BoardDto boardDto = boardService.findById(boardId);
-        request.setAttribute("board", boardDto);
-        request.getRequestDispatcher("/WEB-INF/views/board/board_update.jsp").forward(request, response);
+        request.setAttribute("board", boardService.findById(boardId));
+        return "board/board_update";
     }
 
     @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String loginId = (String) request.getSession().getAttribute("loginId");
+    public String post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String memberId = request.getParameter("author");
 
         int boardId = Integer.parseInt(request.getParameter("boardId"));
@@ -37,19 +35,10 @@ public class BoardUpdateController implements Controller {
                 .content(content)
                 .build();
 
-        if (memberId == null) {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('로그인 후 해주세요!'); location.href='/member/login';</script>");
-        }
-        if (!loginId.equals(memberId)) {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('잘못된 접근입니다!'); location.href = '/board/item?boardId=" + boardId + "';</script>");
-        }
+        if (memberId == null) return "redirect:/member/login";
 
-        int result = boardService.updateArticle(boardDto);
+        boardService.updateArticle(boardDto);
 
-        if (result != 0) {
-            response.sendRedirect("/board/item?boardId=" + boardId);
-        }
+        return "redirect:/board/item?boardId=" + boardId;
     }
 }

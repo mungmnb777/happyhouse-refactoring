@@ -16,15 +16,18 @@ public class BoardInsertController implements Controller {
     private final BoardService boardService = BoardServiceImpl.getInstace();
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/board/board_insert.jsp").forward(request, response);
+    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getSession().getAttribute("loginId") == null) return "redirect:/member/login";
+        return "board/board_insert";
     }
 
     @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         String loginId = (String) request.getSession().getAttribute("loginId");
+
+        if (loginId == null) return "redirect:/member/login";
 
         MemberDto memberDto = MemberDto.builder()
                 .id(loginId)
@@ -36,13 +39,8 @@ public class BoardInsertController implements Controller {
                 .member(memberDto)
                 .build();
 
-        int result = boardService.addArticle(boardDto);
+        boardService.addArticle(boardDto);
 
-        if (result != 0) {
-            response.sendRedirect("/board/items");
-        } else {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('로그인 후 해주세요!'); location.href='/member/login';</script>");
-        }
+        return "redirect:/board/items";
     }
 }

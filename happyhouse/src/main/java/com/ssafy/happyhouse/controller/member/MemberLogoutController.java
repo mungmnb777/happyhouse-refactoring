@@ -11,15 +11,9 @@ import java.io.IOException;
 public class MemberLogoutController implements Controller {
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("loginId");
-
-        response.sendRedirect("/");
-    }
-
-    @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        return "redirect:/";
     }
 }

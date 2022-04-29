@@ -17,21 +17,12 @@ public class PlaceInsertController implements Controller {
     private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String memberId = (String) request.getSession().getAttribute("loginId");
         String dongCode = request.getParameter("dong");
 
         // 로그인 한 상태가 아니면 비정상적인 접근!
-        if (memberId == null) {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('로그인하고 접근해주세요!'); location.href='/member/login';</script>");
-            return;
-        }
+        if (memberId == null) return "redirect:/member/login";
 
         MemberDto memberDto = MemberDto.builder()
                 .id(memberId)
@@ -46,13 +37,8 @@ public class PlaceInsertController implements Controller {
                 .dong(dong)
                 .build();
 
-        int result = favPlaceService.addFavPlace(favPlaceDto);
+        favPlaceService.addFavPlace(favPlaceDto);
 
-        if (result != 0) {
-            response.sendRedirect("/place/items");
-        } else {
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("<script>alert('이미 있는 위치 정보입니다!'); location.href='/place/items';</script>");
-        }
+        return "redirect:/place/items";
     }
 }

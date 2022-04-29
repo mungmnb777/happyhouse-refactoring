@@ -5,7 +5,6 @@ import com.ssafy.happyhouse.dto.BoardDto;
 import com.ssafy.happyhouse.service.BoardService;
 import com.ssafy.happyhouse.service.BoardServiceImpl;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,17 +15,12 @@ public class BoardSearchController implements Controller {
     private final BoardService boardService = BoardServiceImpl.getInstace();
 
     @Override
-    public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int articleNo = Integer.parseInt(request.getParameter("boardId"));
 
         BoardDto boardDto = boardService.findById(articleNo);
         request.setAttribute("board", boardDto);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/board_search.jsp");
-        dispatcher.forward(request, response);
-    }
 
-    @Override
-    public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        return "board/board_search";
     }
 }
