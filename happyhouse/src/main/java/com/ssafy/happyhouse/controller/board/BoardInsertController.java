@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class BoardInsertController implements Controller {
 
-    private final BoardService boardService = BoardServiceImpl.getInstace();
+    private final BoardService boardService = BoardServiceImpl.getInstance();
 
     @Override
     public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

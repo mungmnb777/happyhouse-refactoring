@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class BoardListController implements Controller {
 
-    private final BoardService boardService = BoardServiceImpl.getInstace();
-    private final PagingService pagingService = PagingServiceImpl.getInstace();
+    private final BoardService boardService = BoardServiceImpl.getInstance();
+    private final PagingService pagingService = PagingServiceImpl.getInstance();
 
     @Override
     public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

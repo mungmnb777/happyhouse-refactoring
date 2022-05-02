@@ -20,8 +20,8 @@ import java.util.Map;
 
 public class PlaceSearchController implements Controller {
 
-    private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
-    private final PagingService pagingService = PagingServiceImpl.getInstace();
+    private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstance();
+    private final PagingService pagingService = PagingServiceImpl.getInstance();
 
     @Override
     public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

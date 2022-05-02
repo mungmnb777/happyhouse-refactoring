@@ -12,7 +12,7 @@ public class PagingServiceImpl implements PagingService {
 	private PagingServiceImpl() {
 	}
 
-	public static PagingService getInstace() {
+	public static PagingService getInstance() {
 		return service;
 	}
 

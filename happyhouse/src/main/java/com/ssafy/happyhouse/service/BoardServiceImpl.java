@@ -14,7 +14,7 @@ public class BoardServiceImpl implements BoardService{
 	
 	private BoardServiceImpl() {}
 	
-	public static BoardService getInstace() {
+	public static BoardService getInstance() {
 		return service;
 	}
 

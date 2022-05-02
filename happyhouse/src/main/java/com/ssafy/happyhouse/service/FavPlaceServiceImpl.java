@@ -13,7 +13,7 @@ public class FavPlaceServiceImpl implements FavPlaceService{
 	
 	private FavPlaceServiceImpl() {}
 	
-	public static FavPlaceService getInstace() {
+	public static FavPlaceService getInstance() {
 		return service;
 	}
 

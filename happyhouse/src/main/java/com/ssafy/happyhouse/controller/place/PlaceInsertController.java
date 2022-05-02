@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class PlaceInsertController implements Controller {
 
-    private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstace();
+    private final FavPlaceService favPlaceService = FavPlaceServiceImpl.getInstance();
 
     @Override
     public String post(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

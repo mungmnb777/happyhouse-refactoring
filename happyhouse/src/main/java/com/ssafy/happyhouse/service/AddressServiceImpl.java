@@ -15,7 +15,7 @@ public class AddressServiceImpl implements AddressService {
 	private AddressServiceImpl() {
 	}
 
-	public static AddressService getInstace() {
+	public static AddressService getInstance() {
 		return service;
 	}
 

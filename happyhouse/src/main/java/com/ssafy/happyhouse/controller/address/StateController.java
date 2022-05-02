@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class StateController implements Controller {
 
-    private final AddressService addressService = AddressServiceImpl.getInstace();
+    private final AddressService addressService = AddressServiceImpl.getInstance();
 
     @Override
     public JsonEntity get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

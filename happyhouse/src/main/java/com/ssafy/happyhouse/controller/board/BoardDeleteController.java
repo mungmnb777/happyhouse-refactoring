@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class BoardDeleteController implements Controller {
 
-    private final BoardService boardService = BoardServiceImpl.getInstace();
+    private final BoardService boardService = BoardServiceImpl.getInstance();
 
     @Override
     public String post(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

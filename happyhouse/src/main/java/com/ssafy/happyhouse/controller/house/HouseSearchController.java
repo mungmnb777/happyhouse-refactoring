@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class HouseSearchController implements Controller {
 
-    private final HouseService houseService = HouseServiceImpl.getInstace();
-    private final PagingService pagingService = PagingServiceImpl.getInstace();
+    private final HouseService houseService = HouseServiceImpl.getInstance();
+    private final PagingService pagingService = PagingServiceImpl.getInstance();
 
     @Override
     public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

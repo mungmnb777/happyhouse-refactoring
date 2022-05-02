@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class MemberDeleteController implements Controller {
 
-    private final MemberService memberService = MemberServiceImpl.getInstace();
+    private final MemberService memberService = MemberServiceImpl.getInstance();
 
     @Override
     public String post(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {

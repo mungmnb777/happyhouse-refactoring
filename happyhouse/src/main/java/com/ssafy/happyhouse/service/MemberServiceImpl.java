@@ -10,7 +10,7 @@ public class MemberServiceImpl implements MemberService{
 	
 	private MemberServiceImpl() {}
 	
-	public static MemberService getInstace() {
+	public static MemberService getInstance() {
 		return service;
 	}
 	

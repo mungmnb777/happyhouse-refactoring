@@ -13,7 +13,7 @@ public class HouseServiceImpl implements HouseService{
 	
 	private HouseServiceImpl() {}
 	
-	public static HouseService getInstace() {
+	public static HouseService getInstance() {
 		return service;
 	}
 

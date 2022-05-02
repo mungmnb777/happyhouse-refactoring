@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class MemberSearchController implements Controller {
 
-    private final MemberService memberService = MemberServiceImpl.getInstace();
+    private final MemberService memberService = MemberServiceImpl.getInstance();
 
     @Override
     public String get(Map<String, String> parameters, Map<String, Object> model, HttpSession session) throws ServletException, IOException {
