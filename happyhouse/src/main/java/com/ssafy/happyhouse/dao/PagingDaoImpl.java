@@ -26,8 +26,7 @@ public class PagingDaoImpl implements PagingDao {
 		sql.append("from houseinfo \n");
 		sql.append("where city_code = ?");
 
-		try (Connection conn = DBConnection.getConnection();
-			 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 			pstmt.setString(1, cityCode);
 
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -49,8 +48,7 @@ public class PagingDaoImpl implements PagingDao {
 		sql.append("from favplace \n");
 		sql.append("where member_id = ?");
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 			pstmt.setString(1, member.getId());
 
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -71,9 +69,7 @@ public class PagingDaoImpl implements PagingDao {
 		sql.append("select count(*) as cnt \n");
 		sql.append("from board \n");
 
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					return rs.getInt("cnt");
